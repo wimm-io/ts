@@ -11,20 +11,20 @@ fn main() -> Result<()> {
         ..Default::default()
     })?;
 
-    let id1 = ts.create_todo(NewTodo {
+    let t1 = ts.create_todo(NewTodo {
         title: "foo".to_string(),
         ..Default::default()
     })?;
 
-    println!("created Todo: {id1}...");
+    println!("created Todo: {t1:?}...");
 
-    let id2 = ts.create_todo(NewTodo {
+    let t2 = ts.create_todo(NewTodo {
         title: "goof".to_string(),
         note: Some("bar".to_string()),
         ..Default::default()
     })?;
 
-    println!("created Todo: {id2}...");
+    println!("created Todo: {t2:?}...");
 
     println!("listing Todos:");
     for todo in ts.list_todos()? {

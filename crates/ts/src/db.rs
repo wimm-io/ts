@@ -27,13 +27,12 @@ impl Db {
         })
     }
 
-    pub fn create_todo<T: Into<Todo>>(&self, todo: T) -> Result<String> {
+    pub fn create_todo<T: Into<Todo>>(&self, todo: T) -> Result<Todo> {
         let todo: Todo = todo.into();
-        let id = todo.id.clone();
         let tx = self.inner.rw_transaction()?;
-        tx.insert::<Todo>(todo)?;
+        tx.insert::<Todo>(todo.clone())?;
         tx.commit()?;
-        Ok(id)
+        Ok(todo)
     }
 
     pub fn get_todo(&self, id: &str) -> Result<Option<Todo>> {

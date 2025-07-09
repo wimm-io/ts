@@ -39,7 +39,7 @@ impl TrustedSystem {
         Ok(Self { db })
     }
 
-    pub fn create_todo(&self, todo: NewTodo) -> Result<String> {
+    pub fn create_todo(&self, todo: NewTodo) -> Result<Todo> {
         self.db.create_todo(todo)
     }
 
@@ -103,7 +103,7 @@ mod tests {
     #[test]
     fn test_create_todo() {
         run_test(|ts| {
-            let id = ts
+            let todo = ts
                 .create_todo(NewTodo {
                     title: "Test Todo".to_string(),
                     note: Some("This is a test note".to_string()),
@@ -113,9 +113,7 @@ mod tests {
 
             let todos = ts.list_todos().expect("Failed to list todos");
             assert_eq!(todos.len(), 1);
-            assert_eq!(todos[0].id, id);
-            assert_eq!(todos[0].title, "Test Todo");
-            assert_eq!(todos[0].note.as_deref(), Some("This is a test note"));
+            assert_eq!(todos[0], todo);
         })
     }
 
@@ -142,16 +140,16 @@ mod tests {
     #[test]
     fn test_complete_todo() {
         run_test(|ts| {
-            let id = ts
+            let todo = ts
                 .create_todo(NewTodo {
                     title: "Complete Me".to_string(),
                     ..Default::default()
                 })
                 .expect("Failed to create todo");
 
-            ts.complete_todo(&id).expect("Failed to complete todo");
+            ts.complete_todo(&todo.id).expect("Failed to complete todo");
 
-            let todo = ts.get_todo(&id).expect("Failed to get todo").unwrap();
+            let todo = ts.get_todo(&todo.id).expect("Failed to get todo").unwrap();
             assert!(todo.completed);
         });
     }
