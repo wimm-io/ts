@@ -1,5 +1,6 @@
 use std::path::PathBuf;
 
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::{db::Db, error::Result, models::v1};
@@ -69,7 +70,7 @@ impl TrustedSystem {
     }
 }
 
-#[derive(Default)]
+#[derive(Default, Serialize, Deserialize, Debug)]
 pub struct NewTodo {
     pub title: String,
     pub note: Option<String>,
