@@ -4,6 +4,8 @@ use native_db::{Models, ToKey, native_db};
 use native_model::{Model, native_model};
 use serde::{Deserialize, Serialize};
 
+use crate::app::Todo;
+
 static MODELS: OnceLock<Models> = OnceLock::new();
 
 pub fn get_models() -> &'static Models {
@@ -16,9 +18,7 @@ pub fn get_models() -> &'static Models {
     })
 }
 
-pub type Todo = v1::Todo;
-
-mod v1 {
+pub mod v1 {
     use super::*;
 
     #[derive(Deserialize, Serialize, Debug, PartialEq, Clone)]

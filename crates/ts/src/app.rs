@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use uuid::Uuid;
 
-use crate::{db::Db, error::Result, models::Todo};
+use crate::{db::Db, error::Result, models::v1};
 
 pub struct TrustedSystem {
     db: Db,
@@ -19,6 +19,8 @@ pub enum DbType {
 pub struct Config {
     pub db_type: DbType,
 }
+
+pub type Todo = v1::Todo;
 
 impl TrustedSystem {
     pub fn new(config: Config) -> Result<Self> {

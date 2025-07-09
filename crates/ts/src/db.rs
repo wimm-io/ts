@@ -2,10 +2,7 @@ use std::path::Path;
 
 use native_db::{Builder, db_type};
 
-use crate::{
-    error::Result,
-    models::{Todo, get_models},
-};
+use crate::{app::Todo, error::Result, models::get_models};
 
 pub struct Db {
     inner: native_db::Database<'static>,
