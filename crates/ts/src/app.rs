@@ -51,10 +51,12 @@ impl TrustedSystem {
         self.db.get_todo(id)
     }
 
-    pub fn complete_todo(&self, id: &str) -> Result<()> {
+    pub fn update_todo(&self, id: &str, updated: NewTodo) -> Result<()> {
         if let Some(todo) = self.get_todo(id)? {
             let updated_todo = Todo {
-                completed: true,
+                title: updated.title,
+                note: updated.note,
+                completed: updated.completed,
                 ..todo.clone()
             };
             self.db.update_todo(todo, updated_todo)?;
@@ -138,7 +140,7 @@ mod tests {
     }
 
     #[test]
-    fn test_complete_todo() {
+    fn test_update_todo() {
         run_test(|ts| {
             let todo = ts
                 .create_todo(NewTodo {
@@ -147,7 +149,15 @@ mod tests {
                 })
                 .expect("Failed to create todo");
 
-            ts.complete_todo(&todo.id).expect("Failed to complete todo");
+            ts.update_todo(
+                &todo.id,
+                NewTodo {
+                    note: Some("completed on MM/DD".to_string()),
+                    completed: true,
+                    title: todo.title.clone(),
+                },
+            )
+            .expect("Failed to complete todo");
 
             let todo = ts.get_todo(&todo.id).expect("Failed to get todo").unwrap();
             assert!(todo.completed);
